@@ -1,13 +1,21 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const query = ref("");
 const results = ref([]);
 const loading = ref(false);
 const searched = ref(false);
+
+onMounted(() => {
+  if (route.query.q) {
+    query.value = route.query.q;
+    search();
+  }
+});
 
 async function search() {
   if (!query.value.trim()) return;

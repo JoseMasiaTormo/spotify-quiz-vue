@@ -15,7 +15,7 @@ function logout() {
 <template>
   <div class="min-h-screen bg-zinc-950 text-white flex flex-col">
     <nav
-      v-if="!['login', 'register'].includes(route.name)"
+      v-if="auth.isAuthenticated() && !['login', 'register'].includes(route.name)"
       class="sticky top-0 z-50 bg-zinc-900 border-b border-zinc-800 px-8 py-4 flex items-center justify-between"
     >
       <span class="text-green-500 font-bold text-lg">🎵 SpotifyQuiz</span>

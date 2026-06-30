@@ -46,14 +46,14 @@ router.get("/search", auth, async (req, res) => {
       id: a.id,
       name: a.name,
       followers: a.followers.total.toLocaleString("es-ES"),
-      image: a.image[0]?.url || null,
+      image: a.images?.[0]?.url || null,
     }));
 
     const result = { artists };
     setCache(cacheKey, result);
     res.json(result);
   } catch (e) {
-    console.error(e.response?.data || e.message);
+    console.error(e);
     res.status(500).json({ message: "Error al buscar en Spotify" });
   }
 });

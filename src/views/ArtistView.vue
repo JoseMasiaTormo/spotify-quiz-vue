@@ -8,17 +8,20 @@ const router = useRouter();
 const artist = ref(null);
 const albums = ref([]);
 const loading = ref(true);
-const saved = ref(true);
+const saved = ref(false);
 
 onMounted(async () => {
   try {
     const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
-    const [artistRes, albumsRes] = await Promise.all([
+    const [artistRes, albumsRes, favoritesRes] = await Promise.all([
       fetch(`http://localhost:3000/spotify/artist/${route.params.id}`, { headers }),
       fetch(`http://localhost:3000/spotify/artist/${route.params.id}/albums`, { headers }),
+      fetch(`http://localhost:3000/favorites`, { headers }),
     ]);
     artist.value = await artistRes.json();
     albums.value = await albumsRes.json();
+    const favorites = await favoritesRes.json();
+    saved.value = favorites.some((f) => f.artistId === route.params.id);
   } catch (e) {
     console.error(e);
   } finally {
@@ -57,7 +60,11 @@ async function toggleFavorite() {
       ← Volver
     </button>
 
-    <div v-if="loading" class="flex flex-col gap-10">
+    <div v-if="loading" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <div v-else-if="artist" class="flex flex-col gap-10">
       <div class="flex gap-8 items-center">
         <img
           v-if="artist.image"
@@ -100,9 +107,8 @@ async function toggleFavorite() {
           <div
             v-for="album in albums"
             :key="album.id"
-            class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-cols gap-3"
+            class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col gap-3"
           >
-            >
             <img
               v-if="album.image"
               :src="album.image"

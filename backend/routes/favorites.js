@@ -5,21 +5,21 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
-  const favorites = db.prepare("SELECT * FROM favorites WHERE userId = ? ORDER BY createdAt DESC").all(req.user.id);
+  const favorites = db.prepare("SELECT * FROM favorites WHERE userId = ? ORDER BY createdAt DESC").all(req.userId);
   res.json(favorites);
 });
 
 router.post("/", auth, async (req, res) => {
   const { artistId, artistName, artistImage } = req.body;
 
-  const existing = db.prepare("SELECT id FROM favorites WHERE userId = ? AND artistId = ?").get(req.user.id, artistId);
+  const existing = db.prepare("SELECT id FROM favorites WHERE userId = ? AND artistId = ?").get(req.userId, artistId);
 
   if (existing) {
     return res.status(400).json({ error: "El artista estaba ya en favoritos" });
   }
 
   db.prepare("INSERT INTO favorites (userId, artistId, artistName, artistImage) VALUES (?, ?, ?, ?)").run(
-    req.user.id,
+    req.userId,
     artistId,
     artistName,
     artistImage,

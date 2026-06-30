@@ -15,7 +15,7 @@ async function login() {
   try {
     const res = await fetch("http://localhost:3000/auth/login", {
       method: "POST",
-      headers: { ContentType: "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.value, password: password.value }),
     });
     const data = await res.json();

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
-import RegiterView from "../views/RegiterView.vue";
+import RegisterView from "../views/RegisterView.vue";
 import ArtistView from "../views/ArtistView.vue";
 import FavoritesView from "../views/FavoritesView.vue";
 import HistoryView from "../views/HistoryView.vue";
@@ -9,7 +9,7 @@ import HistoryView from "../views/HistoryView.vue";
 const routes = [
   { path: "/", component: HomeView, meta: { requiresAuth: true } },
   { path: "/login", component: LoginView },
-  { path: "/register", component: RegiterView },
+  { path: "/register", component: RegisterView },
   { path: "/artist/:id", component: ArtistView, meta: { requiresAuth: true } },
   { path: "/favorites", component: FavoritesView, meta: { requiresAuth: true } },
   { path: "/history", component: HistoryView, meta: { requiresAuth: true } },
